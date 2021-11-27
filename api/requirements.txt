@@ -1,0 +1,10 @@
+fastapi
+aiofiles
+gunicorn
+# gunicorn[gthread]
+uvicorn[standard]
+setuptools
+wheel
+requests
+# komodorpc 
+# slick-bitcoinrpc

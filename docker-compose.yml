@@ -1,0 +1,90 @@
+# https://docs.docker.com/compose/compose-file/compose-file-v3/
+# https://docs.docker.com/compose/networking/
+# https://www.penta-code.com/creating-a-lemp-stack-with-docker-compose/
+version: "3.8"
+services:
+
+  api:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile.api
+    container_name: api
+    command: gunicorn -c gunicorn_config.py backend.main:app
+    depends_on:
+      - blockchain
+    links:
+      - "blockchain:dero"
+    environment:
+      - PORT=8080
+    ports:
+      - "8080:8080"
+
+
+  blockchain:
+    build:
+      context: ./blockchain
+      dockerfile: Dockerfile.dero
+    container_name: blockchain
+    command: ./derod-linux-amd64 --data-dir ./testdata --rpc-bind 0.0.0.0:20209 &
+    expose:
+      - 20209
+      - 20206
+
+  # daemon:
+  #   build:
+  #     context: ./node
+  #     dockerfile: Dockerfile
+  #   command: ./derod-linux-amd64 --data-dir ./testdata --rpc-bind 0.0.0.0:20209 &
+  #   ports:
+  #     - "20209:20209"
+
+  # daemon_wallet:
+  #   build:
+  #     context: ./dero_wallet
+  #     dockerfile: Dockerfile
+  #   command: ./dero-wallet-cli-linux-amd64 --wallet-file ./wallet.db --password "" --unlocked --daemon-address derodaemon:20209 --rpc-server --rpc-bind 0.0.0.0:20206 &
+  #   ports:
+  #     - "20206:20206"
+  #   links:
+  #     - "daemon:derodaemon"
+
+
+
+  # nginx:
+  #   build: ./nginx
+  #   container_name: nginx
+  #   restart: always
+  #   ports:
+  #     - "80:80"
+
+# networks:
+  # backend:
+    # driver: bridge
+
+
+  # nginx-proxy:
+  # nginx:
+    # build: ./nginx
+    # build: ./nginx-proxy
+    # container_name: nginx
+    # restart: always
+    # ports:
+    #   - "20209:20209"
+    # environment:
+    #   - JSONRPC_PROXY_PORT=20209
+    #   - JSONRPC_PROXY_BACKEND=daemon:20209
+    #   - JSONRPC_PROXY_WHITELIST=json_rpc,get_info,getheight,getblockcount
+    #   - JSONRPC_PROXY_DEFAULT_METHOD=get_info
+
+
+  # node_dero:
+  #   build:
+  #     context: ./node
+  #     dockerfile: Dockerfile
+  #   container_name: dero_node
+  #   # entrypoint: /code/entrypoint.sh
+  #   command: ./derod-linux-amd64 --data-dir ./testdata --rpc-bind 0.0.0.0:20209 &
+  #   expose:
+  #     - 20209
+  #   # ports:
+  #     # - "20209:20209"

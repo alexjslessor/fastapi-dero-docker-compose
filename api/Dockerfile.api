@@ -1,0 +1,30 @@
+# https://docs.komodoplatform.com/basic-docs/smart-chains/smart-chain-setup/installing-from-source.html#linux
+FROM python:3.9-slim
+
+ENV APP_HOME /app
+
+WORKDIR $APP_HOME
+
+RUN apt-get update \
+    && apt-get install -y gcc g++ openssl libxml2-dev libxslt-dev musl-dev libxslt1-dev libffi-dev zlib1g-dev libssl-dev neovim ranger htop unzip git wget curl sudo \
+    && apt-get install -y build-essential python3-dev python3-pip python3-setuptools python3-wheel python3-cffi libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 shared-mime-info
+
+RUN /usr/local/bin/python -m pip install --upgrade pip
+
+COPY . .
+
+RUN pip install -r requirements.txt --no-cache-dir \
+    && pip install -vvv uvloop uwsgi
+
+RUN find /usr/local/lib/python3.9 -name '*.c' -delete \
+    && find /usr/local/lib/python3.9 -name '*.pxd' -delete \
+    && find /usr/local/lib/python3.9 -name '*.pyd' -delete \
+    && find /usr/local/lib/python3.9 -name '__pycache__' | xargs rm -r
+
+# CMD ["uwsgi", "app.ini"]
+
+# use with python3.9 image
+# CMD gunicorn -c gunicorn_config.py backend.main:app
+
+# use with ubuntu
+# CMD python3 -m gunicorn -c gunicorn_config.py backend.main:app
