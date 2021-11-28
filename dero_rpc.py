@@ -41,26 +41,3 @@ d.get_info()
 # d.get_height()
 # d.get_block_count()
 
-
-
-
-
-
-# construct payload for HTTP request
-#payload = {'jsonrpc': '2.0', 'id': '1', 'method': 'getblockcount'}
-# payload = {'jsonrpc': '2.0', 'id': '1', 'method': 'get_info'}
-# works
-# r = requests.post('http://127.0.0.1:20209/json_rpc',
-                #   json=payload, headers={'Connection': 'close'})
-# works
-#r = requests.post('http://localhost:20209/json_rpc', json=payload, headers={'Connection': 'close'})
-# works
-#r = requests.post('http://0.0.0.0:20209/json_rpc', json=payload, headers={'Connection': 'close'})
-
-#r = requests.post('http://127.0.0.1:20206/json_rpc', json=payload, headers={'Connection': 'close'})
-
-# print(r.json())
-
-# if r.status_code == requests.codes.ok:
-#    d = r.json()['result']
-#    pprint(d)

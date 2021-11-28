@@ -9,9 +9,10 @@ router = APIRouter()
 settings = get_settings()
 
 DERO_DAEMON_URI = settings.DERO_DAEMON_URI
-# url2 = 'http://dero:20209/json_rpc'
 
 deroAPI = Dero(rpc_url=DERO_DAEMON_URI)
+
+
 
 @router.get("/get_info")
 def dero_get_info():

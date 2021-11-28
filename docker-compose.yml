@@ -14,6 +14,7 @@ services:
       - blockchain
     links:
       - "blockchain:dero"
+      - "daemon_wallet:dero-wallet"
     environment:
       - PORT=8080
     ports:
@@ -38,17 +39,19 @@ services:
   #   ports:
   #     - "20209:20209"
 
-  # daemon_wallet:
-  #   build:
-  #     context: ./dero_wallet
-  #     dockerfile: Dockerfile
-  #   command: ./dero-wallet-cli-linux-amd64 --wallet-file ./wallet.db --password "" --unlocked --daemon-address derodaemon:20209 --rpc-server --rpc-bind 0.0.0.0:20206 &
-  #   ports:
-  #     - "20206:20206"
-  #   links:
-  #     - "daemon:derodaemon"
-
-
+  daemon_wallet:
+    build:
+      context: ./dero_wallet
+      dockerfile: Dockerfile
+    container_name: daemon_wallet
+    command: ./dero-wallet-cli-linux-amd64 --wallet-file ./wallet.db --password "" --unlocked --daemon-address derodaemon:20209 --rpc-server --rpc-bind 0.0.0.0:20206 &
+    links:
+      - "blockchain:derodaemon"
+    expose:
+      - 20209
+      - 20206
+    # ports:
+      # - "20206:20206"
 
   # nginx:
   #   build: ./nginx
@@ -75,16 +78,3 @@ services:
     #   - JSONRPC_PROXY_BACKEND=daemon:20209
     #   - JSONRPC_PROXY_WHITELIST=json_rpc,get_info,getheight,getblockcount
     #   - JSONRPC_PROXY_DEFAULT_METHOD=get_info
-
-
-  # node_dero:
-  #   build:
-  #     context: ./node
-  #     dockerfile: Dockerfile
-  #   container_name: dero_node
-  #   # entrypoint: /code/entrypoint.sh
-  #   command: ./derod-linux-amd64 --data-dir ./testdata --rpc-bind 0.0.0.0:20209 &
-  #   expose:
-  #     - 20209
-  #   # ports:
-  #     # - "20209:20209"

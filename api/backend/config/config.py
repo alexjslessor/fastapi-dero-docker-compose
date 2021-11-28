@@ -18,6 +18,11 @@ class _BaseSettings(BaseSettings):
     OID_ERROR: str = 'Please try again later.'
 
     DERO_DAEMON_URI: str = 'http://dero:20209/json_rpc'
+    DERO_WALLET_URI: str = 'http://dero-wallet:20206/json_rpc'
+    # url2 = 'http://localhost:20209/json_rpc'
+    # url2 = 'http://blockchain:20209/json_rpc'
+    # url2 = 'http://dero:20209/json_rpc'
+    # url4 = 'http://localhost:20209/json_rpc'
 
 class DevSettings(_BaseSettings):
     CORS_ORIGINS: List[str] = ["*"]
@@ -35,7 +40,6 @@ class DevSettings(_BaseSettings):
     PIRATE_USER: str = str(environ.get('PIRATE_USER'))
     PIRATE_PASSWORD: str = str(environ.get('PIRATE_PASSWORD'))
 
-    # DERO_URI: str = "http://blockchain:20209"
 
 @functools.lru_cache()
 def get_settings(**kwargs) -> BaseSettings:

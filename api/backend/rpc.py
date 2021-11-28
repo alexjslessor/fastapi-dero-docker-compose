@@ -9,6 +9,8 @@ class Dero(object):
     _get_height = {'jsonrpc': '2.0', 'id': '1', 'method': 'getheight'}
     _get_block_count = {'jsonrpc': '2.0', 'id': '1', 'method': 'getblockcount'}
 
+    _get_address = {'jsonrpc': '2.0', 'id': '1', 'method': 'getaddress'}
+
     def __init__(self, rpc_url='http://localhost:20209/json_rpc'):
         self.rpc_url = rpc_url
 
@@ -29,3 +31,8 @@ class Dero(object):
 
     def get_block_count(self):
         return self._post_request(self._get_block_count)
+
+    def get_address(self):
+        '''wallet'''
+        return self._post_request(self._get_address)
+

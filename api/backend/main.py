@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from .routers.v1.dero_daemon import read_routes
+from .routers.v1.dero_wallet import dero_wallet_routes
+
 from .config.config import get_settings
 from .config.route_prefix import *
 
@@ -23,6 +26,8 @@ app.add_middleware(
     allow_headers=["*"])
 
 app.include_router(read_routes.router, tags=CRUD_READ)
+app.include_router(dero_wallet_routes.router, tags=['Dero Wallet'])
+
 
 @app.on_event("startup")
 async def startup_event():
